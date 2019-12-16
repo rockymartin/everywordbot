@@ -1,6 +1,7 @@
 import tweepy
 import os
-
+from dotenv import load_dotenv
+load_dotenv()
 
 class EverywordBot(object):
 
@@ -10,27 +11,39 @@ class EverywordBot(object):
                  lat=None, long=None, place_id=None,
                  prefix=None, suffix=None, bbox=None,
                  dry_run=False):
-        self.source_file_name = source_file_name
-        self.index_file_name = index_file_name
+        #file with line seperated words to be tweeted
+        self.source_file_name = "wordlist.txt"
+        #create a new .txt index file with just 0 inside 
+        self.index_file_name = "index.txt"
         self.lat = lat
         self.long = long
         self.place_id = place_id
+        #set words to appear before or after line from source_file_name, you'll probably want a space
         self.prefix = prefix
-        self.suffix = suffix
+        self.suffix = " rocky"
+        #bbox or "bounding box", aka the geo location that will appear under your tweet. 
         self.bbox = bbox
+        #change line 12 or add --dry_run to args to do everything but send tweet
         self.dry_run = dry_run
-
+        
+        #variables hosted in .env file
+        consumer_key = os.getenv("consumer_key")
+        consumer_secret = os.getenv("consumer_secret")
+        access_token = os.getenv("access_token")
+        secret_token = os.getenv("secret_token")
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token, token_secret)
+        auth.set_access_token(access_token,token_secret)
         self.twitter = tweepy.API(auth)
-
+    
     def _get_current_index(self):
+    #determine which line in source_file to tweet
         if not(os.path.isfile(self.index_file_name)):
             return 0
         with open(self.index_file_name) as index_fh:
             return int(index_fh.read().strip())
 
     def _increment_index(self, index):
+    #add 1 to the index
         with open(self.index_file_name, "w") as index_fh:
             index_fh.truncate()
             index_fh.write("%d" % (index + 1))
