@@ -32,7 +32,7 @@ class EverywordBot(object):
         access_token = os.getenv("access_token")
         secret_token = os.getenv("secret_token")
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token,token_secret)
+        auth.set_access_token(access_token, secret_token)        
         self.twitter = tweepy.API(auth)
     
     def _get_current_index(self):

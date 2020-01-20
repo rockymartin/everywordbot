@@ -34,6 +34,8 @@ then put the following in your crontab:
 
 	0,30 * * * * cd /home/aparrish; bash post_tweet.sh >>error.log 2>&1
 
+You can store your keys/tokens in a .env file and then reference them in to the script, as well
+
 Production Notes
 ----------------
 
